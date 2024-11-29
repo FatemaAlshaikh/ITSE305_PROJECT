@@ -146,7 +146,7 @@ class ReservationService {
 }
 // Presentation Layer
 // Main class to handle user interaction for making and canceling reservations
-public class CancelBooking {
+public class CancelBookinng {
     public static void main(String[] args) {
         ReservationRepository repository = new ReservationRepository();
         ReservationService service = new ReservationService(repository);
@@ -181,6 +181,7 @@ public class CancelBooking {
         if (reservations.isEmpty()) {
             System.out.println("No current reservations.");
         } else {
+            System.out.println("Current Reservations:");
             System.out.println("Current Reservations:");
             reservations.forEach(System.out::println);
         }
