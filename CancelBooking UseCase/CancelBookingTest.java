@@ -4,7 +4,6 @@ import java.io.PrintStream;
 import java.time.LocalDate;
 import static org.junit.Assert.*;
 public class CancelBookingTest {
-
         @Test
         public void testDisplayReservations() {
             ReservationRepository repository = new ReservationRepository();
