@@ -1,9 +1,6 @@
 import org.junit.Test;
-
 import java.time.LocalDate;
-
 import static org.junit.Assert.*;
-
     public class ReservationRepositoryTest {
         @Test
         public void testAddReservation() {
@@ -13,7 +10,6 @@ import static org.junit.Assert.*;
 
             assertTrue(repository.exists("1", "020900581"));
         }
-
         @Test
         public void testRemoveReservation() {
             ReservationRepository repository = new ReservationRepository();
