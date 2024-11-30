@@ -190,13 +190,10 @@ public class CancelBookinng {
         try {
                 // Adding sreservations
                 displayReservations(service);
- 
                 // Displaying current reservations
                 displayReservations(service);
-     
                 // Show cancellation policy
                 service.showCancellationPolicy();
-     
                 // Canceling a reservation
                 String roomNumber = getUserInput("Enter room number to cancel: ", scanner);
                 String cpr = getUserInput("Enter your CPR number: ", scanner);
@@ -207,7 +204,6 @@ public class CancelBookinng {
                 } else {
                     System.out.println("Invalid input. Please provide valid room number and CPR.");
                 }
-     
                 // Displaying updated reservations
                 displayReservations(service);
             } finally {
