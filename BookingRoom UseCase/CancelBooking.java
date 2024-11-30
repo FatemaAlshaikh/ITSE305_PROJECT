@@ -4,8 +4,6 @@ import java.util.Scanner;
 import java.time.LocalDate;
 // Data Layer
 // Represents a reservation with details like customer name, room type, room number, price, CPR, phone number, and booking date.
-
-
 class Reservation {
     private String customerName;
     private String roomType;
@@ -63,8 +61,6 @@ class Reservation {
     }
 }
 // Manages a collection of reservations, allowing adding, removing, and checking existence of reservations.
-
-
 class ReservationRepository {
     private List<Reservation> reservations;
     // Initializes the repository with an empty list of reservations
@@ -90,8 +86,6 @@ class ReservationRepository {
 }
 // Business Layer
 // Provides methods for reservation management, including adding, canceling, and displaying reservations.
-
-
 class ReservationService {
     private ReservationRepository repository;
     // Initializes the service with a given reservation repository
@@ -152,9 +146,6 @@ class ReservationService {
 }
 // Presentation Layer
 // Main class to handle user interaction for making and canceling reservations
-
-
-public class CancelBookinng {
 public class CancelBooking {
     public static void main(String[] args) {
         ReservationRepository repository = new ReservationRepository();
@@ -191,11 +182,6 @@ public class CancelBooking {
             System.out.println("No current reservations.");
         } else {
             System.out.println("Current Reservations:");
-            System.out.println("Current Reservations:");
-            reservations.forEach(System.out::println);
-        }
-    }
-}
             reservations.forEach(System.out::println);
         }
     }
