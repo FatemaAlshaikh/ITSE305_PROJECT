@@ -39,4 +39,24 @@ public class AuthenticationServiceTest {
     public void testNullInputs() {
         assertFalse(authService.authenticate(null, null));
     }
+
+    @Test
+    public void testAuthenticateWithSpecialCharacters(){
+        assertFalse(authService.authenticate("user!@#", "password"));
+    }
+
+    @Test
+    public void testDuplicateUsernames(){
+        // attempt to add a user with a duplicate username
+        boolean isAdded = userRepository.addUser(new User("test_user", "newPassword123"));
+
+        // make sure duplicate username can’t be added
+        assertFalse(isAdded);
+
+        // verify the original user is still valid
+        assertTrue(authService.authenticate("test_user", "newPassword123"));
+
+        // verify the duplicate password doesn’t override the original
+        assertFalse(authService.authenticate("test_user", "newPassword123"));
+    }
 }
