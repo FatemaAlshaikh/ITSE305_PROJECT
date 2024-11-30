@@ -3,7 +3,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.time.LocalDate;
 import static org.junit.Assert.*;
-public class CancelBookinngTest {
+public class CancelBookingTest {
 
         @Test
     public void testDisplayReservationsWithReservations() {
@@ -16,7 +16,7 @@ public class CancelBookinngTest {
         PrintStream printStream = new PrintStream(outputStream);
         System.setOut(printStream);
         // Act
-        CancelBookinng.displayReservations(service);
+        CancelBooking.displayReservations(service);
         // Assert
         String output = outputStream.toString();
         assertTrue(output.contains("Current Reservations"));
@@ -34,7 +34,7 @@ public class CancelBookinngTest {
         PrintStream printStream = new PrintStream(outputStream);
         System.setOut(printStream);
         // Act
-        CancelBookinng.displayReservations(service);
+        CancelBooking.displayReservations(service);
         // Assert
         String output = outputStream.toString();
         assertTrue(output.contains("No current reservations."));
@@ -51,7 +51,7 @@ public class CancelBookinngTest {
         PrintStream printStream = new PrintStream(outputStream);
         System.setOut(printStream);
         // Act
-        CancelBookinng.displayReservations(service);
+        CancelBooking.displayReservations(service);
         // Assert
         String output = outputStream.toString();
         assertTrue(output.contains("Current Reservations"));
