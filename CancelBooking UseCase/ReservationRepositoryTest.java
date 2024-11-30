@@ -1,7 +1,10 @@
 import org.junit.Test;
 import java.time.LocalDate;
 import static org.junit.Assert.*;
+
+
     public class ReservationRepositoryTest {
+
         @Test
         public void testAddReservation() {
             ReservationRepository repository = new ReservationRepository();
@@ -10,6 +13,7 @@ import static org.junit.Assert.*;
 
             assertTrue(repository.exists("1", "020900581"));
         }
+
         @Test
         public void testRemoveReservation() {
             ReservationRepository repository = new ReservationRepository();
@@ -19,6 +23,7 @@ import static org.junit.Assert.*;
             assertTrue(repository.remove("1", "020900581"));
             assertFalse(repository.exists("1", "020900581"));
         }
+
 
         @Test
         public void testGetAllReservations() {
@@ -31,6 +36,7 @@ import static org.junit.Assert.*;
             assertEquals(2, repository.getAll().size());
         }
 
+        
         @Test
         public void testExists() {
             ReservationRepository repository = new ReservationRepository();
