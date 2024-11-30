@@ -3,6 +3,7 @@ import java.util.Scanner;
 //Presentation layer (interation to user) To choose the method "Credit Card , Debit Card ,and Benefit Pay " to Payment
 class Hotel  {
     public static void main(String[] args) {
+        /*any thing*/
         Scanner kbd = new Scanner(System.in);
         Payment.PaymentService paymentService = new Payment.PaymentService();
         System.out.print("\nPlease enter the total amount to pay on (BD) = ");
