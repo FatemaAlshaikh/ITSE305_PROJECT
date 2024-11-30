@@ -32,7 +32,7 @@ import static org.junit.Assert.*;
             // Simulate user input
             Scanner scanner = new Scanner("yes\n"); // User confirms cancellation
             // Act
-            service.cancelReservation("1", "020900581", scanner);
+            service.cancelReservation("1", "020900581");
             // Assert
             assertFalse(repository.exists("1", "020900581"));
         }
@@ -45,7 +45,7 @@ import static org.junit.Assert.*;
         // Simulate user input for cancellation with an invalid response
         Scanner scanner = new Scanner("no\n"); // User cancels the cancellation
         // Act
-        service.cancelReservation("1", "020900581", scanner);
+        service.cancelReservation("1", "020900581");
         // Assert
         assertTrue(repository.exists("1", "020900581")); // Reservation should still exist
     }
@@ -57,7 +57,7 @@ import static org.junit.Assert.*;
         // Simulate user input
         Scanner scanner = new Scanner("yes\n"); // User confirms cancellation
         // Act
-        service.cancelReservation("999", "nonexistentCPR", scanner);
+        service.cancelReservation("999", "nonexistentCPR");
         // Assert
         assertFalse(repository.exists("999", "nonexistentCPR")); // Reservation should not exist
     }
@@ -70,7 +70,7 @@ import static org.junit.Assert.*;
         // Simulate user input for invalid room number (empty)
         Scanner scanner = new Scanner("yes\n");
         // Act
-        service.cancelReservation("", "020900581", scanner);
+        service.cancelReservation("", "020900581");
         // Assert
         assertTrue(repository.exists("1", "020900581")); // Reservation should still exist
     }
@@ -83,7 +83,7 @@ import static org.junit.Assert.*;
         // Simulate user input
         Scanner scanner = new Scanner("yes\n");
         // Act
-        service.cancelReservation("1", "invalidCPR", scanner);
+        service.cancelReservation("1", "invalidCPR");
         // Assert
         assertTrue(repository.exists("1", "020900581")); // Reservation with correct CPR should still exist
     }
