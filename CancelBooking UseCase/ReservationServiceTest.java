@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Scanner;
 import static org.junit.Assert.*;
 
+
     public class ReservationServiceTest {
+
         @Test
         public void testAddReservation() {
             // Arrange
@@ -27,6 +29,7 @@ import static org.junit.Assert.*;
             assertEquals(customerName, reservations.get(0).getcustomerName());
         }
 
+
         @Test
         public void testCancelReservation() {
             // Arrange
@@ -44,6 +47,7 @@ import static org.junit.Assert.*;
             assertFalse(repository.exists("1", "020900581"));
         }
 
+        
         @Test
         public void testShowCancellationPolicy() {
             // Arrange
