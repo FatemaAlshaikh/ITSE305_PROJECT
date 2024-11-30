@@ -8,6 +8,7 @@ public class RoomBookingApp {
     private BookingService bookingService;
     private Scanner scanner;
 
+
     // Constructor initializes the booking service and scanner
     //
     public RoomBookingApp() {
