@@ -6,6 +6,8 @@ import static org.junit.Assert.assertTrue;
 public class BookingServiceTest {
 
 
+
+
     @Test
     public void testBookRoomSuccessfully() {
         // Arrange
