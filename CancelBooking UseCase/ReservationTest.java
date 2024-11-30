@@ -1,11 +1,14 @@
 import org.junit.Test;
 import java.time.LocalDate;
 import static org.junit.Assert.*;
+
 public class ReservationTest {
+
     @Test
     public void testReservationConstructor() {
         LocalDate bookingDate = LocalDate.now();
         Reservation reservation = new Reservation("Fatema Alshaikh", "Deluxe", "1", 150.0, "020900581", "00973-36784589", bookingDate);
+
 
 
         assertEquals("Fatema Alshaikh", reservation.getcustomerName());
@@ -16,6 +19,7 @@ public class ReservationTest {
         assertEquals("00973-36784589", reservation.getphoneNumber());
         assertEquals(bookingDate, reservation.getBookingDate());
     }
+    
     @Test
     public void testToString() {
         LocalDate bookingDate = LocalDate.now();
