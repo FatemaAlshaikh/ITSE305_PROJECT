@@ -1,11 +1,12 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Scanner;
 import java.time.LocalDate;
 // Data Layer
 // Represents a reservation with details like customer name, room type, room number, price, CPR, phone number, and booking date.
-
-
 class Reservation {
     private final String customerName;
     private final String roomType;
@@ -16,6 +17,19 @@ class Reservation {
     private final LocalDate bookingDate;
     // Constructor to initialize reservation details
     public Reservation(String customerName, String roomType, String roomNumber, double price, String cpr, String phoneNumber, LocalDate bookingDate) {
+        // Validate the inputs
+        if (customerName == null || customerName.isEmpty()) {
+            throw new IllegalArgumentException("Customer name cannot be empty.");}
+        if (roomType == null || roomType.isEmpty()) {
+            throw new IllegalArgumentException("Room type cannot be empty."); }
+        if (roomNumber == null || roomNumber.isEmpty()) {
+            throw new IllegalArgumentException("Room number cannot be empty.");}
+        if (price <= 0) {
+            throw new IllegalArgumentException("Price must be greater than zero."); }
+        if (!isValidPhoneNumber(phoneNumber)) {
+            throw new IllegalArgumentException("Invalid phone number."); }
+        if (!isValidCpr(cpr)) {
+            throw new IllegalArgumentException("Invalid CPR."); }
         this.customerName = customerName;
         this.roomType = roomType;
         this.roomNumber = roomNumber;
@@ -61,37 +75,57 @@ class Reservation {
                 ", CPR: " + cpr + ", Phone Number: " + phoneNumber +
                 ", Booking Date: " + bookingDate;
     }
+    private boolean isValidPhoneNumber(String phoneNumber) {
+        return phoneNumber != null && phoneNumber.matches("\\d{10}");
+    }
+
+    private boolean isValidCpr(String cpr) {
+        return cpr != null && cpr.matches("\\d{10}");
+    }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Reservation that = (Reservation) o;
+        return roomNumber.equals(that.roomNumber) && cpr.equals(that.cpr);
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(roomNumber, cpr);
+    }
 }
 // Manages a collection of reservations, allowing adding, removing, and checking existence of reservations.
-
-
 class ReservationRepository {
-    private List<Reservation> reservations;
+    private final  Map<String,Reservation> reservationsMap;
     // Initializes the repository with an empty list of reservations
     public ReservationRepository() {
-        this.reservations = new ArrayList<>();
+        this.reservationsMap = new HashMap<>();
     }
     // Adds a new reservation to the repository
-    public void add(Reservation reservation) {
-        reservations.add(reservation);
+    public synchronized void add(Reservation reservation) {
+        String key = generateKey(reservation.getRoomNumber(), reservation.getCpr());
+        reservationsMap.put(key, reservation);
     }
     // Removes a reservation based on room number and CPR; returns true if removed
-    public boolean remove(String roomNumber, String cpr) {
-        return reservations.removeIf(reservation -> reservation.getRoomNumber().equals(roomNumber) && reservation.getCpr().equals(cpr));
+    public synchronized boolean remove(String roomNumber, String cpr) {
+        String key = generateKey(roomNumber, cpr);
+        return reservationsMap.remove(key) != null;
     }
     // Returns a list of all reservations
     public List<Reservation> getAll() {
-        return reservations;
+        return new ArrayList<>(reservationsMap.values());
     }
     // Checks if a reservation exists based on room number and CPR
     public boolean exists(String roomNumber, String cpr) {
-        return reservations.stream().anyMatch(reservation -> reservation.getRoomNumber().equals(roomNumber) && reservation.getCpr().equals(cpr));
+        String key = generateKey(roomNumber, cpr);
+        return reservationsMap.containsKey(key);
+    }
+    private String generateKey(String roomNumber, String cpr) {
+        return roomNumber + ":" + cpr;
     }
 }
 // Business Layer
 // Provides methods for reservation management, including adding, canceling, and displaying reservations.
-
-
 class ReservationService {
     private ReservationRepository repository;
     // Initializes the service with a given reservation repository
@@ -105,38 +139,33 @@ class ReservationService {
         System.out.println("Reservation added successfully.");
     }
     // Cancels a reservation after confirmation
-    public void cancelReservation(String roomNumber, String cpr, Scanner scanner) {
+    public String cancelReservation(String roomNumber, String cpr) {
         if (repository.exists(roomNumber, cpr)) {
-            System.out.print("Are you sure you want to cancel the reservation for room " + roomNumber + "? (yes or no): ");
-            String confirmation = scanner.nextLine();
-            if (confirmation.equalsIgnoreCase("yes")) {
-                Reservation reservation = repository.getAll().stream()
-                        .filter(r -> r.getRoomNumber().equals(roomNumber) && r.getCpr().equals(cpr))
-                        .findFirst().orElse(null);
-                if (reservation != null) {
-                    processRefund(reservation);
-                    if (repository.remove(roomNumber, cpr)) {
-                        System.out.println("Reservation for room " + roomNumber + " has been canceled successfully.");
-                    }
-                } else {
-                    System.out.println("No reservation found for room " + roomNumber + " with CPR " + cpr + ".");
-                }
+            Reservation reservation = repository.getAll().stream()
+                    .filter(r -> r.getRoomNumber().equals(roomNumber) && r.getCpr().equals(cpr))
+                    .findFirst().orElse(null);
+
+            if (reservation != null) {
+                return processRefund(reservation);
             } else {
-                System.out.println("Cancellation aborted.");
+                return "No reservation found for room " + roomNumber + " with CPR " + cpr + ".";
             }
         } else {
-            System.out.println("No reservation found for room " + roomNumber + " with CPR " + cpr + ".");
+            return "No reservation found for room " + roomNumber + " with CPR " + cpr + ".";
         }
     }
     // Processes the refund based on the cancellation policy
-    private void processRefund(Reservation reservation) {
+    private String processRefund(Reservation reservation) {
         LocalDate today = LocalDate.now();
         LocalDate bookingDate = reservation.getBookingDate();
+        boolean isNoShow = today.isAfter(bookingDate);
         // Check if cancellation is within 24 hours of booking
-        if (today.isBefore(bookingDate.minusDays(1))) {
-            System.out.println("Refund processed: Full refund for reservation.");
+        if (isNoShow) {
+            return "Refund processed: No-show penalty applies. No refund available.";
+        } else if (today.isBefore(bookingDate.minusDays(1))) {
+            return "Refund processed: Full refund for reservation.";
         } else {
-            System.out.println("Refund processed: One night's stay penalty applies.");
+            return "Refund processed: One night's stay penalty applies.";
         }
     }
     // Returns a list of all reservations
@@ -148,55 +177,86 @@ class ReservationService {
         System.out.println("Cancellation Policy:");
         System.out.println("1. Cancellations made 24 hours before check-in are fully refundable.");
         System.out.println("2. Cancellations made within 24 hours of check-in will incur a penalty of one night's stay.");
+        System.out.println("3. No-shows will not receive any refund.");
     }
 }
 // Presentation Layer
 // Main class to handle user interaction for making and canceling reservations
-
-
 public class CancelBookinng {
-public class CancelBooking {
     public static void main(String[] args) {
         ReservationRepository repository = new ReservationRepository();
         ReservationService service = new ReservationService(repository);
         Scanner scanner = new Scanner(System.in);
         try {
-            // Adding sample reservations
-            service.addReservation("Fatema Alshaikh", "Deluxe", "1", 150.0, "020900581", "00973-36784589", LocalDate.now().minusDays(2));
-            service.addReservation("Fatema Mohamed", "Standard", "14", 100.0, "030056722", "00968-54379124", LocalDate.now().minusDays(1));
-            service.addReservation("Zahra Husan", "Deluxe", "70", 150.0, "010400357", "00973-33367225", LocalDate.now());
-            service.addReservation("Ahmed Amer", "Standard", "44", 100.0, "327799002", "00966-36598735", LocalDate.now().minusDays(3));
-            service.addReservation("Noora Duaij", "Deluxe", "32", 150.0, "070050349", "00968-34567890", LocalDate.now());
-            service.addReservation("Ali Hasan", "Standard", "68", 100.0, "760606911", "00966-0536417547", LocalDate.now().minusDays(2));
-            // Displaying reservations
-            displayReservations(service);
-            // Show cancellation policy
-            service.showCancellationPolicy();
-            // Canceling a reservation
-            System.out.print("\nEnter room number to cancel: ");
-            String roomNumber = scanner.nextLine();
-            System.out.print("Enter your CPR number: ");
-            String cpr = scanner.nextLine();
-            service.cancelReservation(roomNumber, cpr, scanner);
-            // Displaying updated reservations
-            displayReservations(service);
-        } finally {
-            scanner.close();
+                // Adding sreservations
+                displayReservations(service);
+ 
+                // Displaying current reservations
+                displayReservations(service);
+     
+                // Show cancellation policy
+                service.showCancellationPolicy();
+     
+                // Canceling a reservation
+                String roomNumber = getUserInput("Enter room number to cancel: ", scanner);
+                String cpr = getUserInput("Enter your CPR number: ", scanner);
+     
+                if (validateRoomNumber(roomNumber) && validateCpr(cpr)) {
+                    String cancellationResult = service.cancelReservation(roomNumber, cpr);
+                    System.out.println(cancellationResult);
+                } else {
+                    System.out.println("Invalid input. Please provide valid room number and CPR.");
+                }
+     
+                // Displaying updated reservations
+                displayReservations(service);
+            } finally {
+                scanner.close();
+            }
         }
-    }
+            // Adding e reservations
+            @SuppressWarnings("unused")
+            private static void addReservation(ReservationService service) {
+                service.addReservation("Fatema Alshaikh", "Deluxe", "1", 150.0, "020900581", "00973-36784589", LocalDate.now().minusDays(2));
+                service.addReservation("Fatema Mohamed", "Standard", "14", 100.0, "030056722", "00968-54379124", LocalDate.now().minusDays(1));
+                service.addReservation("Zahra Husan", "Deluxe", "70", 150.0, "010400357", "00973-33367225", LocalDate.now());
+                service.addReservation("Ahmed Amer", "Standard", "44", 100.0, "327799002", "00966-36598735", LocalDate.now().minusDays(3));
+                service.addReservation("Noora Duaij", "Deluxe", "32", 150.0, "070050349", "00968-34567890", LocalDate.now());
+                service.addReservation("Ali Hasan", "Standard", "68", 100.0, "760606911", "00966-0536417547", LocalDate.now().minusDays(2)); }
     // Displays the current reservations to the user
-    static void displayReservations(ReservationService service) {
+   public static void displayReservations(ReservationService service) {
         List<Reservation> reservations = service.displayReservations();
         if (reservations.isEmpty()) {
             System.out.println("No current reservations.");
         } else {
             System.out.println("Current Reservations:");
-            System.out.println("Current Reservations:");
             reservations.forEach(System.out::println);
-        }
-    }
-}
-            reservations.forEach(System.out::println);
-        }
-    }
-}
+        } }
+ // Method to get user input
+ private static String getUserInput(String prompt, Scanner scanner) {
+    System.out.print(prompt);
+    return scanner.nextLine().trim();}
+// Validate the room number input (non-empty and numeric)
+private static boolean validateRoomNumber(String roomNumber) {
+    if (roomNumber.isEmpty()) {
+        return false;}
+    try {
+        Integer.parseInt(roomNumber); // Validate if it's a number
+        return true;
+    } catch (NumberFormatException e) {
+        return false;
+    }}
+// Validate the CPR input (non-empty and numeric)
+private static boolean validateCpr(String cpr) {
+    if (cpr.isEmpty()) {
+        return false;}
+    try {
+        Long.parseLong(cpr); // Validate if it's a number
+        return true;
+    } catch (NumberFormatException e) {
+        return false;
+    }}
+@Override
+public String toString() {
+    return "CancelBookinng []";
+}}
