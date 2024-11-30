@@ -1,18 +1,24 @@
 import java.util.HashMap;
 import java.util.Map;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 
 // Data Layer
 // The User class represents a user with a username and password.
 
 
 class User {
-    private String username;
+    private final String username;
     private String password;
 
-    // Constructor initializes user with a username and password.
+    // a static BCryptPasswordEncoder for hashing and verifying passwords
+    private static final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+    // Constructor initializes user with a username and password and hashes the provided password.
     public User(String username, String password) {
         this.username = username;
-        this.password = password;
+        this.password = hashPassword(password);
     }
     // Getter for username
     public String getUsername() {
@@ -26,9 +32,32 @@ class User {
     public String getPassword() {
         return password;
     }
-    // Setter for password
+    // Setter for password (re-hashes the new password)
     public void setPassword(String password) {
-        this.password = password;
+        this.password = hashPassword(password);
+    }
+
+    // verifies if a plain-text password matches the stored hashed password
+    public boolean verifyPassword(String plainPassword){
+        return passwordEncoder.matches(plainPassword, this.password);
+    }
+
+    // private method to hash a password using BCrypt
+    private String hashPassword(String plainPassword){
+        return passwordEncoder.encode(plainPassword);
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return Objects. equals(username, user.uesername);
+    }
+
+    @Override
+    public int hashCode(){
+        return Objects.hash(username);
     }
 }
 
@@ -37,11 +66,15 @@ class User {
 
 
 class UserRepository {
-    private Map<String, User> users = new HashMap<>();
+    private final ConcurrentHashMap<String, User> users = new ConcurrentHashMap<>();
 
     // Adds a user to the repository
-    public void addUser(User user) {
+    public boolean addUser(User user) {
+        if (users.containsKey(user.getUsername())){
+            return false; // prevent duplicate users
+        }
         users.put(user.getUsername(), user);
+        return true;
     }
 
     // Retrieves a user by their username; returns null if not found.
@@ -56,7 +89,7 @@ class UserRepository {
 
 
 class AuthenticationService {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     // Constructor initializes with a UserRepository
     public AuthenticationService(UserRepository userRepository) {
@@ -73,8 +106,8 @@ class AuthenticationService {
         }
         User user = userRepository.findByUsername(username);
 
-        // Check if user exists and password matches
-        return user != null && user.getPassword().equals(password);
+        // use verifyPassword for secure password checking
+        return user != null && user.verifyPassword(password);
     }
 }
 
@@ -85,7 +118,7 @@ class AuthenticationService {
 
 
 class LoginController {
-    private AuthenticationService authService;
+    private final AuthenticationService authService;
 
     // Constructor initializes the controller with an AuthenticationService
     public LoginController(AuthenticationService authService) {
@@ -94,14 +127,14 @@ class LoginController {
 
     // Handles a login attempt by checking the provided credentials with the AuthenticationService.
     // Outputs the result of the authentication to the console.
-    public void login(String username, String password) {
+    public String login(String username, String password) {
         boolean isAuthenticated = authService.authenticate(username, password);
 
         // Display the result of the login attempt to the console
         if (isAuthenticated) {
-            System.out.println("Login successful! Access granted.");
+            return "Login successful! Access granted.";
         } else {
-            System.out.println("Login failed. Invalid username or password.");
+            return "Login failed. Invalid username or password.";
         }
     }
 }
