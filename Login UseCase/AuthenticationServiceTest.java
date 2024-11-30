@@ -1,8 +1,9 @@
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-public class AuthenticationServiceTest {
 
+
+public class AuthenticationServiceTest {
     private UserRepository userRepository;
     private AuthenticationService authService;
 
