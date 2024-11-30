@@ -4,6 +4,7 @@ import java.util.Scanner;
 class Hotel  {
     public static void main(String[] args) {
         /*any thing*/
+        /*any thing*/
         Scanner kbd = new Scanner(System.in);
         Payment.PaymentService paymentService = new Payment.PaymentService();
         System.out.print("\nPlease enter the total amount to pay on (BD) = ");
