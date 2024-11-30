@@ -2,9 +2,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+
 // Presentation Layer: This class handles user interaction 
 //(room number and customer name) displaying booking results.
 public class RoomBookingApp {
+
     private BookingService bookingService;
     private Scanner scanner;
 
