@@ -3,6 +3,8 @@ import java.util.Map;
 
 // Data Layer
 // The User class represents a user with a username and password.
+
+
 class User {
     private String username;
     private String password;
@@ -12,7 +14,6 @@ class User {
         this.username = username;
         this.password = password;
     }
-
     // Getter for username
     public String getUsername() {
         return username;
@@ -33,6 +34,8 @@ class User {
 
 // UserRepository manages user data in a simple in-memory map.
 // For storing and retrieving user information.
+
+
 class UserRepository {
     private Map<String, User> users = new HashMap<>();
 
@@ -50,6 +53,8 @@ class UserRepository {
 // Business Layer
 // AuthenticationService represents the business layer for user login operations.
 // for user authentication.
+
+
 class AuthenticationService {
     private UserRepository userRepository;
 
@@ -77,6 +82,8 @@ class AuthenticationService {
 // LoginController serves as the presentation layer for handling user interaction
 // for login operations. It interacts with the AuthenticationService to manage
 // user login attempts.
+
+
 class LoginController {
     private AuthenticationService authService;
 
