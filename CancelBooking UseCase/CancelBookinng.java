@@ -7,13 +7,13 @@ import java.time.LocalDate;
 
 
 class Reservation {
-    private String customerName;
-    private String roomType;
-    private String roomNumber;
-    private double price;
-    private String cpr;
-    private String phoneNumber;
-    private LocalDate bookingDate;
+    private final String customerName;
+    private final String roomType;
+    private final String roomNumber;
+    private final double price;
+    private final String cpr;
+    private final String phoneNumber;
+    private final LocalDate bookingDate;
     // Constructor to initialize reservation details
     public Reservation(String customerName, String roomType, String roomNumber, double price, String cpr, String phoneNumber, LocalDate bookingDate) {
         this.customerName = customerName;
