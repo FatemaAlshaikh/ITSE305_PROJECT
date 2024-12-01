@@ -2,6 +2,7 @@ import java.util.Scanner;
 //The class and methods of Presentation layer
 //Presentation layer (interation to user) To choose the method "Credit Card , Debit Card ,and Benefit Pay " to Payment
 
+
 class Hotel  {
     /**/
     public static void main(String[] args) {

@@ -2,6 +2,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 
+
 //Testing HotelTest class using JUnit test framework
 public class HotelTest {
 //checks if the payment method is correctly "Credit Card" and valid amounts =150
