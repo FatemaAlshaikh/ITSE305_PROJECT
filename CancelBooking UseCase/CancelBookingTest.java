@@ -3,6 +3,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.time.LocalDate;
 import static org.junit.Assert.*;
+
 public class CancelBookingTest {
 
         @Test
