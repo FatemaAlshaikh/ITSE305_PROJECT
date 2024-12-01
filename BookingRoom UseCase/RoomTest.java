@@ -6,6 +6,7 @@ import static org.junit.Assert.assertEquals;
 
 public class RoomTest {
 
+
     @Test
     public void testRoomCreation() {
         // Arrange
