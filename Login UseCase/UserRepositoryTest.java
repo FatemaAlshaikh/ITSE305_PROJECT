@@ -30,8 +30,8 @@ public class UserRepositoryTest {
 
     @Test
     public void testDuplicateUsers(){
-        User user1 = new User("duplicate_user", password123);
-        User user2 = new User("duplicate_user", password12345);
+        User user1 = new User("duplicate_user", "password123");
+        User user2 = new User("duplicate_user", "password12345");
 
         assertTrue(userRepository.addUser(user1)); // first add should succeed
         assertFalse(userRepository.addUser(user2)); // second add with the same username should fail
