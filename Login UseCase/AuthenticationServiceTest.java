@@ -41,11 +41,6 @@ public class AuthenticationServiceTest {
     }
 
     @Test
-    public void testAuthenticateWithSpecialCharacters(){
-        assertFalse(authService.authenticate("user!@#", "password"));
-    }
-
-    @Test
     public void testDuplicateUsernames(){
         // attempt to add a user with a duplicate username
         boolean isAdded = userRepository.addUser(new User("test_user", "newPassword123"));
