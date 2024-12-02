@@ -1,7 +1,6 @@
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
 // Data Layer
@@ -47,18 +46,6 @@ class User {
         return passwordEncoder.encode(plainPassword);
     }
 
-    @Override
-    public boolean equals(Object o){
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects. equals(username, user.username);
-    }
-
-    @Override
-    public int hashCode(){
-        return Objects.hash(username);
-    }
 }
 
 // UserRepository manages user data in a simple in-memory map.
