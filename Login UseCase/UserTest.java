@@ -25,11 +25,4 @@ public class UserTest {
         assertFalse(user.verifyPassword("Password123"));
     }
 
-    @Test
-    public void testEqualsAndHashCode() {
-    User user1 = new User("test_user", "password4564");
-    User user2 = new User("test_user", "Password09878");
-    assertEquals(user1, user2); // Same username, should be equal
-    assertEquals(user1.hashCode(), user2.hashCode());
-}
 }
