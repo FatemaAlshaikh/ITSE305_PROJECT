@@ -20,8 +20,8 @@ public class UserTest {
         User user = new User("test_user", "Password123");
 
         // update password and verify
-        user.setPassword("userPassword");
-        assertTrue(user.verifyPassword("userPassword"));
+        user.setPassword("Password0968");
+        assertTrue(user.verifyPassword("Password0968"));
         assertFalse(user.verifyPassword("Password123"));
     }
 
