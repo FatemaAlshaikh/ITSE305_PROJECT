@@ -45,7 +45,7 @@ class Reservation {
         return cpr != null && Pattern.matches("\\d{9}", cpr);
     }
     private boolean isValidPhoneNumber(String phoneNumber) {
-        return phoneNumber != null && Pattern.matches("d{5}-\\d{8}", phoneNumber);
+        return phoneNumber != null && Pattern.matches("\\d{5}-\\d{8}", phoneNumber);
     }
     // Getter for customer Name
     public String getcustomerName(){
