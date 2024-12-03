@@ -99,7 +99,7 @@ class ReservationService {
         System.out.println("Reservation added successfully.");
     }
     // Cancels a reservation after confirmation
-    public void cancelReservation(String roomNumber, String cpr, Scanner scanner) {
+    public void cancelReservation(String roomNumber, String cpr) {
         if (repository.exists(roomNumber, cpr)) {
             System.out.print("Are you sure you want to cancel the reservation for room " + roomNumber + "? (yes or no): ");
             String confirmation = scanner.nextLine();
