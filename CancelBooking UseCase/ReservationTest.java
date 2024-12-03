@@ -8,7 +8,7 @@ public class ReservationTest {
         LocalDate bookingDate = LocalDate.now();
         Reservation reservation = new Reservation("Fatema Alshaikh", "Deluxe", "1", 150.0, "020900581", "00973-36784589", bookingDate);
 
-        assertEquals("Fatema Alshaikh", reservation.getcustomerName());
+        assertEquals("Fatema Alshaikh", reservation.getCustomerName());
         assertEquals("Deluxe", reservation.getroomType());
         assertEquals("1", reservation.getRoomNumber());
         assertEquals(150.0, reservation.getprice(), 0.01);
