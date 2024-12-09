@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import static org.junit.Assert.*;
 
+
     public class ReservationRepositoryTest {
         @Test
         public void testAddReservation() {
@@ -23,7 +24,24 @@ import static org.junit.Assert.*;
             assertTrue(repository.remove("1", "020900581"));
             assertFalse(repository.exists("1", "020900581"));
         }
-
+                  // Edge Case: Test removing a reservation that doesn't exist
+        @Test
+    public void testRemoveNonExistentReservation() {
+        ReservationRepository repository = new ReservationRepository();
+        // Try to remove a reservation that doesn't exist
+        boolean result = repository.remove("999", "nonexistentCPR");
+        // The method should return false, as the reservation does not exist
+        assertFalse(result);
+        }
+    // Edge Case: Test removing from an empty repository
+    @Test
+    public void testRemoveFromEmptyRepository() {
+        ReservationRepository repository = new ReservationRepository();
+        // Try to remove a reservation from an empty repository
+        boolean result = repository.remove("1", "020900581");
+        // The method should return false, as there are no reservations in the repository
+        assertFalse(result);
+        }
         @Test
         public void testGetAllReservations() {
             ReservationRepository repository = new ReservationRepository();
