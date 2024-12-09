@@ -13,7 +13,10 @@ class Hotel  {
         Payment.PaymentService paymentService = new Payment.PaymentService();
         System.out.print("\nPlease enter the total amount to pay on (BD) = ");
         double Totalamount = kbd.nextDouble();
-        if (Totalamount>=0){
+
+        // Validation check for non-negative amount
+        if (paymentService.validateAmount(totalAmount))
+        {
         System.out.println("Please choose you option to pay:");
         System.out.println("1. Credit Card ");
         System.out.println("2. Debit card ");
@@ -43,6 +46,23 @@ class Hotel  {
         } else {
             System.out.println("The process not successfull , please try again ");
         } kbd.close();}}
+
+// Enum to define payment methods
+enum PaymentMethod {
+    CREDIT_CARD("Credit Card"),
+    DEBIT_CARD("Debit Card"),
+    BENEFIT_PAY("Benefit Pay");
+
+    private final String methodName;
+
+    PaymentMethod(String methodName) {
+        this.methodName = methodName;
+    }
+
+    public String getMethodName() {
+        return methodName;
+    }
+}
 //The class and methods of business layer
 //The business layer calling methods here from data layer
 public class Payment {

@@ -6,6 +6,19 @@ import org.junit.Test;
 
 //Testing HotelTest class using JUnit test framework
 public class HotelTest {
+    // Helper method to test payment processing
+    private void assertPaymentProcessing(String method, double amount) {
+        Payment.PaymentService paymentService = new Payment.PaymentService();
+        boolean result = paymentService.processPayment(method, amount);
+        assertTrue("Payment should be processed successfully for method: " + method, result);
+    }
+
+    // Helper method to test payment storage
+    private void assertPaymentStorage(String method, double amount) {
+        Payment.PaymentService.PaymentStore paymentStore = new Payment.PaymentService().new PaymentStore();
+        boolean result = paymentStore.keepPay(method, amount);
+        assertTrue("Payment should be stored successfully for method: " + method, result);
+    }
 //checks if the payment method is correctly "Credit Card" and valid amounts =150
     @Test
     public void testProcessPaymentCreditCard() {
